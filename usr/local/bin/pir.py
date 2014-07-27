@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python
 
 import sys
@@ -7,14 +6,12 @@ import RPi.GPIO as io
 import subprocess
 
 io.setmode(io.BCM)
-SHUTOFF_DELAY = 10 # seconds
-SWITCHON_DELAY = 3 # seconds
+SHUTOFF_DELAY = 600 # seconds
+SWITCHON_DELAY = 5 # seconds
 PIR_PIN = 25       # 22 on the board
-LED_PIN = 16
 
 def main():
     io.setup(PIR_PIN, io.IN)
-    #io.setup(LED_PIN, io.OUT)
     turned_off = False
     last_motion_time = time.time()
     last_still_time = time.time()
@@ -22,7 +19,6 @@ def main():
     while True:
         if io.input(PIR_PIN):
             last_motion_time = time.time()
-            #io.output(LED_PIN, io.LOW)
             #print ".",
             sys.stdout.flush()
             if turned_off and time.time() > (last_still_time + SWITCHON_DELAY):
@@ -34,8 +30,6 @@ def main():
                 turn_off()
             #print "x"
             last_still_time = time.time()
-            #if not turned_off and time.time() > (last_motion_time + 1):
-            #    io.output(LED_PIN, io.HIGH)
         time.sleep(1)
 
 def turn_on():
@@ -49,5 +43,3 @@ if __name__ == '__main__':
         main()
     except KeyboardInterrupt:
         io.cleanup()
-
-
